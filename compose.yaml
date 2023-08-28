@@ -13,6 +13,26 @@ services:
       context: .
     ports:
       - 8000:8000
+    depends_on:
+      - clash
+#        condition: service_healthy
+
+  clash:
+    image: ghcr.io/dreamacro/clash
+#    restart: always
+    volumes:
+      - ./byWave.yaml:/root/.config/clash/config.yaml:ro
+      # - ./ui:/ui:ro # dashboard volume
+    ports:
+      - "7890:7890"
+      - "7891:7891"
+      # - "8080:8080" # The External Controller (RESTful API)
+    network_mode: "bridge"
+#    healthcheck:
+#      test: [ "CMD", "curl www.google.com" ]
+#      interval: 300s
+#      timeout: 5s
+#      retries: 5
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
